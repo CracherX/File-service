@@ -1,5 +1,5 @@
 from datetime import datetime
-from sqlalchemy import Column, Integer, String, DateTime, Text
+from sqlalchemy import Column, Integer, String, DateTime, Text, Index, UniqueConstraint
 from src.core.database import Base
 
 
@@ -26,6 +26,11 @@ class Files(Base):
 
     # Комментарий
     comment = Column(Text, nullable=True)
+
+    __table_args__ = (
+        UniqueConstraint('name', name='uq_files_name'),
+        Index('ix_files_path', 'path'),
+    )
 
     def __repr__(self):
         return f"<File(name={self.name!r}, extension={self.extension!r}, size={self.size}, path={self.path!r})>"

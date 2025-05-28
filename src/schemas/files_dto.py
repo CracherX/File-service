@@ -15,3 +15,8 @@ class FileDTO(BaseModel):
 
     class Config:
         from_attributes = True
+
+
+class DownloadFileDTO(BaseModel):
+    path: str
+    filename: str

@@ -14,7 +14,7 @@ class App:
         self.db.create_database()
 
     def _include_routers(self) -> None:
-        self.app.include_router(files_endpoint.router, prefix="/api/v1", tags=["Files"])
+        self.app.include_router(files_endpoint.router, prefix="/api/v1", tags=["Файлы"])
 
     def get_app(self) -> FastAPI:
         return self.app

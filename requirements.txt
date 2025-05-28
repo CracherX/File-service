@@ -2,10 +2,10 @@ fastapi
 uvicorn[standard]
 sqlalchemy[asyncio]
 psycopg2-binary
-asyncpg
 alembic
 python-dotenv
 pydantic
 dependency-injector
 pydantic-settings
 python-multipart
+aiofiles
