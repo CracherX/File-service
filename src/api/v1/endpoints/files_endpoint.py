@@ -7,9 +7,8 @@ from starlette.responses import FileResponse
 
 from src.core import responses
 from src.core.container import Container
-from src.schemas import request_dto
-from src.schemas.files_dto import FileDTO
-from src.schemas.request_dto import UpdateFile
+from src.schemas import requests_dto
+from src.schemas.responses_dto import FileDTO, ActualizeResultDTO
 from src.services.files_service import FilesService
 
 router = APIRouter()
@@ -23,7 +22,7 @@ router = APIRouter()
 )
 @inject
 def get_files(
-        dto: request_dto.GetFilesList = Depends(),
+        dto: requests_dto.GetFilesList = Depends(),
         file_service: FilesService = Depends(Provide[Container.file_service])
 ):
     return file_service.list_files(dto.page, dto.page_size, dto.path)
@@ -37,7 +36,7 @@ def get_files(
 )
 @inject
 def get_file(
-        dto: request_dto.GetFile = Depends(),
+        dto: requests_dto.GetFile = Depends(),
         file_service: FilesService = Depends(Provide[Container.file_service])
 ):
     return file_service.get_file(dto.id)
@@ -54,7 +53,7 @@ def get_file(
 )
 @inject
 async def delete_file(
-        dto: request_dto.DeleteFile = Depends(),
+        dto: requests_dto.DeleteFile = Depends(),
         file_service: FilesService = Depends(Provide[Container.file_service])
 ):
     deleted = await file_service.delete_file(dto.id)
@@ -72,7 +71,7 @@ async def delete_file(
 )
 @inject
 async def update_file(
-        dto: UpdateFile,
+        dto: requests_dto.UpdateFile,
         file_service: FilesService = Depends(Provide[Container.file_service])
 ):
     updated = await file_service.update_file(dto)
@@ -102,7 +101,7 @@ async def upload_file(
     extension = os.path.splitext(filename)[1].lstrip(".")
     size = len(content)
 
-    file_dto = request_dto.UploadFile(
+    file_dto = requests_dto.UploadFile(
         name=name,
         extension=extension,
         size=size,
@@ -131,3 +130,11 @@ def download_file(
         filename=response.filename,
         media_type="application/octet-stream"
     )
+
+
+@router.post("/files/actualize", response_model=ActualizeResultDTO)
+@inject
+def actualize_files(
+        service: FilesService = Depends(Provide[Container.file_service]),
+):
+    return service.sync_files()

@@ -2,7 +2,7 @@ from datetime import datetime
 from sqlalchemy.orm import Session
 from src.models.files import Files
 from typing import List, Optional
-from src.schemas.request_dto import UploadFile
+from src.schemas.requests_dto import UploadFile
 
 
 class FileRepository:
@@ -56,3 +56,10 @@ class FileRepository:
         self._db.commit()
         self._db.refresh(file)
         return file
+
+    def get_all_files(self) -> List[Files]:
+        return self._db.query(Files).all()
+
+    def add_files_bulk(self, files: List[Files]) -> None:
+        self._db.bulk_save_objects(files)
+        self._db.commit()

@@ -28,7 +28,6 @@ class Files(Base):
     comment = Column(Text, nullable=True)
 
     __table_args__ = (
-        UniqueConstraint('name', name='uq_files_name'),
         Index('ix_files_path', 'path'),
     )
 

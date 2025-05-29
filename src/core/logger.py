@@ -1,15 +1,19 @@
 import logging
 
 
-def setup_logger(level: str):
-    lv = "INFO"
-    match level:
-        case "INFO":
-            lv = logging.INFO
+def setup_logging(level: str = "INFO") -> logging.Logger:
+    logger = logging.getLogger("uvicorn")
+
+    match level.lower():
         case "DEBUG":
-            lv = logging.DEBUG
-    logging.basicConfig(
-        level=lv,
-        format="%(asctime)s | %(levelname)s | %(name)s | %(message)s",
-    )
-    return logging.getLogger("app")
+            logger.setLevel(logging.DEBUG)
+        case "INFO":
+            logger.setLevel(logging.INFO)
+        case "WARNING":
+            logger.setLevel(logging.WARNING)
+        case "ERROR":
+            logger.setLevel(logging.ERROR)
+        case "CRITICAL":
+            logger.setLevel(logging.CRITICAL)
+
+    return logger

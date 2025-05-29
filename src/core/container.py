@@ -3,6 +3,7 @@ from src.core.database import Database
 from src.repositories.file_repositry import FileRepository
 from src.services.files_service import FilesService
 from src.core.config import setup_config
+from src.core.logger import setup_logging
 
 
 class Container(containers.DeclarativeContainer):
@@ -14,6 +15,8 @@ class Container(containers.DeclarativeContainer):
 
     config = providers.Singleton(setup_config)
 
+    logger = providers.Singleton(setup_logging, level=config.provided.LOG_LEVEL)
+
     db = providers.Singleton(Database, db_url=config.provided.DATABASE_URI)
 
     file_repository = providers.Factory(
@@ -24,5 +27,6 @@ class Container(containers.DeclarativeContainer):
     file_service = providers.Factory(
         FilesService,
         repository=file_repository,
-        config=config
+        config=config,
+        logger=logger
     )

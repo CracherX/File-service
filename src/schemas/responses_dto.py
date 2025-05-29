@@ -20,3 +20,9 @@ class FileDTO(BaseModel):
 class DownloadFileDTO(BaseModel):
     path: str
     filename: str
+
+
+class ActualizeResultDTO(BaseModel):
+    added: list[str]
+    removed: list[str]
+    total_in_db: int
